@@ -1,17 +1,21 @@
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.io.*;
 
 public class Tommy {
 
     private static final String LINE =
             "____________________________________________________________";
+    private static final String FILE_PATH =
+            "data" + File.separator + "tommy.txt";
 
     private static final ArrayList<Task> tasks = new ArrayList<>();
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+        loadTasks();
         greet();
 
+        Scanner sc = new Scanner(System.in);
         while (true) {
             try {
                 String input = sc.nextLine().trim();
@@ -31,7 +35,7 @@ public class Tommy {
         }
     }
 
-
+    /* ================= COMMAND HANDLING ================= */
 
     private static void handleCommand(String input) throws TommyException {
         if (input.startsWith("todo")) {
@@ -55,6 +59,7 @@ public class Tommy {
         }
     }
 
+    /* ================= ADD TASKS ================= */
 
     private static void handleTodo(String input) throws TommyException {
         String desc = input.replaceFirst("todo", "").trim();
@@ -66,10 +71,9 @@ public class Tommy {
 
         Task task = new Todo(desc);
         tasks.add(task);
+        saveTasks();
         printAdd(task);
     }
-
-
 
     private static void handleDeadline(String input) throws TommyException {
         String data = input.replaceFirst("deadline", "").trim();
@@ -83,9 +87,9 @@ public class Tommy {
 
         Task task = new Deadline(parts[0].trim(), parts[1].trim());
         tasks.add(task);
+        saveTasks();
         printAdd(task);
     }
-
 
     private static void handleEvent(String input) throws TommyException {
         String data = input.replaceFirst("event", "").trim();
@@ -99,10 +103,11 @@ public class Tommy {
 
         Task task = new Event(parts[0].trim(), parts[1].trim(), parts[2].trim());
         tasks.add(task);
+        saveTasks();
         printAdd(task);
     }
 
-
+    /* ================= LIST ================= */
 
     private static void listTasks() {
         printLine();
@@ -113,12 +118,13 @@ public class Tommy {
         printLine();
     }
 
-
+    /* ================= MARK / UNMARK ================= */
 
     private static void markTask(String input) throws TommyException {
         int idx = parseIndex(input);
         Task task = tasks.get(idx);
         task.markDone();
+        saveTasks();
 
         printLine();
         System.out.println("Nice! I've marked this task as done:");
@@ -130,6 +136,7 @@ public class Tommy {
         int idx = parseIndex(input);
         Task task = tasks.get(idx);
         task.unmarkDone();
+        saveTasks();
 
         printLine();
         System.out.println("OK, I've marked this task as not done yet:");
@@ -137,10 +144,12 @@ public class Tommy {
         printLine();
     }
 
-    //DELETE
+    /* ================= DELETE ================= */
+
     private static void deleteTask(String input) throws TommyException {
         int idx = parseIndex(input);
         Task removed = tasks.remove(idx);
+        saveTasks();
 
         printLine();
         System.out.println("Noted. I've removed this task:");
@@ -149,7 +158,65 @@ public class Tommy {
         printLine();
     }
 
+    /* ================= FILE SAVE / LOAD ================= */
 
+    private static void loadTasks() {
+        try {
+            File file = new File(FILE_PATH);
+            file.getParentFile().mkdirs();
+
+            if (!file.exists()) {
+                file.createNewFile();
+                return;
+            }
+
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(" \\| ");
+                Task task;
+
+                switch (parts[0]) {
+                    case "T":
+                        task = new Todo(parts[2]);
+                        break;
+                    case "D":
+                        task = new Deadline(parts[2], parts[3]);
+                        break;
+                    case "E":
+                        task = new Event(parts[2], parts[3], parts[4]);
+                        break;
+                    default:
+                        continue;
+                }
+
+                if (parts[1].equals("1")) {
+                    task.markDone();
+                }
+
+                tasks.add(task);
+            }
+            br.close();
+
+        } catch (IOException ignored) {
+        }
+    }
+
+    private static void saveTasks() {
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_PATH));
+            for (Task task : tasks) {
+                bw.write(task.toFileString());
+                bw.newLine();
+            }
+            bw.close();
+        } catch (IOException e) {
+            System.out.println("Error saving tasks.");
+        }
+    }
+
+    /* ================= HELPERS ================= */
 
     private static int parseIndex(String input) throws TommyException {
         try {

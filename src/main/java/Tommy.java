@@ -1,6 +1,9 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+
 
 public class Tommy {
 
@@ -85,11 +88,19 @@ public class Tommy {
             );
         }
 
-        Task task = new Deadline(parts[0].trim(), parts[1].trim());
-        tasks.add(task);
-        saveTasks();
-        printAdd(task);
+        try {
+            LocalDate date = LocalDate.parse(parts[1].trim());
+            Task task = new Deadline(parts[0].trim(), date);
+            tasks.add(task);
+            saveTasks();
+            printAdd(task);
+        } catch (DateTimeParseException e) {
+            throw new TommyException(
+                    "OOPS!!! Please use date format yyyy-MM-dd."
+            );
+        }
     }
+
 
     private static void handleEvent(String input) throws TommyException {
         String data = input.replaceFirst("event", "").trim();
@@ -182,7 +193,7 @@ public class Tommy {
                         task = new Todo(parts[2]);
                         break;
                     case "D":
-                        task = new Deadline(parts[2], parts[3]);
+                        task = new Deadline(parts[2], LocalDate.parse(parts[3]));
                         break;
                     case "E":
                         task = new Event(parts[2], parts[3], parts[4]);
@@ -202,6 +213,7 @@ public class Tommy {
         } catch (IOException ignored) {
         }
     }
+
 
     private static void saveTasks() {
         try {

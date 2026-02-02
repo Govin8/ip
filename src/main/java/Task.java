@@ -19,6 +19,10 @@ public class Task {
         this.isDone = false;
     }
 
+    public boolean getDone() {
+        return isDone;
+    }
+
     public String getDescription() {
         return this.description;
     }
@@ -27,4 +31,9 @@ public class Task {
     public String toString() {
         return "[" + getStatusIcon() + "] " + description;
     }
+
+    public String toFileString() {
+        return "T | " + (isDone ? "1" : "0") + " | " + description;
+    }
+
 }

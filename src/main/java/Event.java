@@ -20,4 +20,11 @@ public class Event extends Task {
     public String toString() {
         return "[E]" + super.toString() + " (from: " + getFrom() + " to: " + getTo() + ")";
     }
+
+    @Override
+    public String toFileString() {
+        return "E | " + (getDone() ? "1" : "0") + " | " + getDescription()
+                + " | " + from + " | " + to;
+    }
+
 }

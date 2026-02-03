@@ -28,7 +28,10 @@ public class Tommy {
         }
         tasks = loadedTasks;
     }
-
+    /**
+     * Starts the chatbot and handles the main interaction loop.
+     * Reads user commands, executes them, and responds until the user exits.
+     */
     public void run() {
         ui.showWelcome();
 
@@ -209,7 +212,10 @@ public class Tommy {
         ui.showMessage("Now you have " + tasks.size() + " tasks in the list.");
         ui.showLine();
     }
-
+    /**
+     * Main entry point for the Tommy application.
+     * Initializes Tommy with the default data file and runs the chatbot
+     */
     public static void main(String[] args) {
         new Tommy("data/tommy.txt").run();
     }

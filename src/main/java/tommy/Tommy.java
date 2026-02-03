@@ -2,6 +2,8 @@ package tommy;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+
 import tommy.ui.Ui;
 import tommy.task.Task;
 import tommy.task.Todo;
@@ -73,6 +75,8 @@ public class Tommy {
             unmarkTask(input);
         } else if (input.startsWith("delete")) {
             deleteTask(input);
+        } else if (input.startsWith("find")) {
+            handleFind(input); // Call the new method for Level-9
         } else {
             throw new TommyException(
                     "I'm sorry, but I don't know what that means :-("
@@ -96,7 +100,31 @@ public class Tommy {
 
         printAdd(task);
     }
+    /**
+     * Handles the find command by searching for tasks containing a keyword.
+     *
+     * @param input The full user input starting with "find".
+     * @throws TommyException If no keyword is provided.
+     */
+    private void handleFind(String input) throws TommyException {
+        String keyword = input.replaceFirst("find", "").trim();
+        if (keyword.isEmpty()) {
+            throw new TommyException("Please provide a keyword to search for.");
+        }
 
+        ArrayList<Task> matches = tasks.findTasks(keyword);
+
+        ui.showLine();
+        if (matches.isEmpty()) {
+            ui.showMessage("No matching tasks found.");
+        } else {
+            ui.showMessage("Here are the matching tasks in your list:");
+            for (int i = 0; i < matches.size(); i++) {
+                ui.showMessage((i + 1) + "." + matches.get(i));
+            }
+        }
+        ui.showLine();
+    }
     private void handleDeadline(String input) throws TommyException {
         String data = input.replaceFirst("deadline", "").trim();
         String[] parts = data.split("/by", 2);

@@ -1,4 +1,4 @@
-# tommy.Tommy User Guide
+# tommy.tommy User Guide
 
 // Update the title above to match the actual product name
 

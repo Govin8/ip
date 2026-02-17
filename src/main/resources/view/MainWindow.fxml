@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="10"
+      xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="tommy.ui.MainWindow"
+      prefWidth="400" prefHeight="600">
+
+    <!-- Scrollable area for dialog -->
+    <ScrollPane fx:id="scrollPane" VBox.vgrow="ALWAYS" fitToWidth="true">
+        <content>
+            <VBox fx:id="dialogContainer" spacing="10"/>
+        </content>
+    </ScrollPane>
+
+    <!-- Text input for user -->
+    <TextField fx:id="userInput"
+               promptText="Type a command and press Enter"
+               onAction="#handleUserInput"/>
+</VBox>
+
+

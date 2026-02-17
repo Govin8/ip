@@ -10,7 +10,6 @@ import tommy.task.Todo;
 import tommy.task.Deadline;
 import tommy.task.Event;
 
-
 public class Tommy {
 
     private final Ui ui;
@@ -30,53 +29,71 @@ public class Tommy {
         }
         tasks = loadedTasks;
     }
+
     /**
-     * Starts the chatbot and handles the main interaction loop.
-     * Reads user commands, executes them, and responds until the user exits.
+     * MainApp entry point for CLI mode
      */
     public void run() {
         ui.showWelcome();
 
         while (true) {
-            try {
-                String input = ui.readCommand().trim();
+            String input = ui.readCommand().trim();
 
-                if (input.equals("bye")) {
-                    ui.showLine();
-                    ui.showGoodbye();
-                    ui.showLine();
-                    break;
-                }
-
-                handleCommand(input);
-
-            } catch (TommyException e) {
+            if (input.equals("bye")) {
                 ui.showLine();
-                ui.showError(e.getMessage());
+                ui.showGoodbye();
                 ui.showLine();
+                break;
             }
+
+            String response = getResponse(input); // no need for try-catch
+            ui.showLine();
+            ui.showMessage(response);
+            ui.showLine();
         }
     }
 
-    /* ================= COMMAND HANDLING ================= */
 
-    private void handleCommand(String input) throws TommyException {
+    /**
+     * GUI-friendly method.
+     * Takes a user input and returns Tommy's response as a String.
+     */
+    public String getResponse(String input) {
+        try {
+            if (input.equals("bye")) {
+                return "Bye. Hope to see you again soon!";
+            }
+            return executeCommand(input);
+        } catch (TommyException e) {
+            return e.getMessage();
+        }
+    }
+
+    /* ================= COMMAND EXECUTION ================= */
+
+    private String executeCommand(String input) throws TommyException {
         if (input.startsWith("todo")) {
             handleTodo(input);
+            return "Added todo task.";
         } else if (input.startsWith("deadline")) {
             handleDeadline(input);
+            return "Added deadline task.";
         } else if (input.startsWith("event")) {
             handleEvent(input);
+            return "Added event task.";
         } else if (input.equals("list")) {
-            listTasks();
+            return listToString();
         } else if (input.startsWith("mark")) {
             markTask(input);
+            return "Task marked as done.";
         } else if (input.startsWith("unmark")) {
             unmarkTask(input);
+            return "Task marked as not done.";
         } else if (input.startsWith("delete")) {
             deleteTask(input);
+            return "Task deleted.";
         } else if (input.startsWith("find")) {
-            handleFind(input); // Call the new method for Level-9
+            return findToString(input);
         } else {
             throw new TommyException(
                     "I'm sorry, but I don't know what that means :-("
@@ -97,34 +114,8 @@ public class Tommy {
         Task task = new Todo(desc);
         tasks.add(task);
         storage.save(tasks);
-
-        printAdd(task);
     }
-    /**
-     * Handles the find command by searching for tasks containing a keyword.
-     *
-     * @param input The full user input starting with "find".
-     * @throws TommyException If no keyword is provided.
-     */
-    private void handleFind(String input) throws TommyException {
-        String keyword = input.replaceFirst("find", "").trim();
-        if (keyword.isEmpty()) {
-            throw new TommyException("Please provide a keyword to search for.");
-        }
 
-        ArrayList<Task> matches = tasks.findTasks(keyword);
-
-        ui.showLine();
-        if (matches.isEmpty()) {
-            ui.showMessage("No matching tasks found.");
-        } else {
-            ui.showMessage("Here are the matching tasks in your list:");
-            for (int i = 0; i < matches.size(); i++) {
-                ui.showMessage((i + 1) + "." + matches.get(i));
-            }
-        }
-        ui.showLine();
-    }
     private void handleDeadline(String input) throws TommyException {
         String data = input.replaceFirst("deadline", "").trim();
         String[] parts = data.split("/by", 2);
@@ -140,8 +131,6 @@ public class Tommy {
             Task task = new Deadline(parts[0].trim(), date);
             tasks.add(task);
             storage.save(tasks);
-
-            printAdd(task);
         } catch (DateTimeParseException e) {
             throw new TommyException(
                     "Please use date format yyyy-MM-dd."
@@ -162,19 +151,40 @@ public class Tommy {
         Task task = new Event(parts[0].trim(), parts[1].trim(), parts[2].trim());
         tasks.add(task);
         storage.save(tasks);
-
-        printAdd(task);
     }
 
     /* ================= LIST ================= */
 
-    private void listTasks() {
-        ui.showLine();
-        ui.showMessage("Here are the tasks in your list:");
-        for (int i = 0; i < tasks.size(); i++) {
-            ui.showMessage((i + 1) + "." + tasks.get(i));
+    private String listToString() {
+        if (tasks.size() == 0) {
+            return "Your task list is empty!";
         }
-        ui.showLine();
+
+        StringBuilder sb = new StringBuilder("Here are the tasks in your list:\n");
+        for (int i = 0; i < tasks.size(); i++) {
+            sb.append(i + 1).append(". ").append(tasks.get(i)).append("\n");
+        }
+        return sb.toString();
+    }
+
+    /* ================= FIND ================= */
+
+    private String findToString(String input) throws TommyException {
+        String keyword = input.replaceFirst("find", "").trim();
+        if (keyword.isEmpty()) {
+            throw new TommyException("Please provide a keyword to search for.");
+        }
+
+        ArrayList<Task> matches = tasks.findTasks(keyword);
+        if (matches.isEmpty()) {
+            return "No matching tasks found.";
+        }
+
+        StringBuilder sb = new StringBuilder("Here are the matching tasks:\n");
+        for (int i = 0; i < matches.size(); i++) {
+            sb.append(i + 1).append(". ").append(matches.get(i)).append("\n");
+        }
+        return sb.toString();
     }
 
     /* ================= MARK / UNMARK ================= */
@@ -184,11 +194,6 @@ public class Tommy {
         Task task = tasks.get(idx);
         task.markDone();
         storage.save(tasks);
-
-        ui.showLine();
-        ui.showMessage("Nice! I've marked this task as done:");
-        ui.showMessage("  " + task);
-        ui.showLine();
     }
 
     private void unmarkTask(String input) throws TommyException {
@@ -196,25 +201,14 @@ public class Tommy {
         Task task = tasks.get(idx);
         task.unmarkDone();
         storage.save(tasks);
-
-        ui.showLine();
-        ui.showMessage("OK, I've marked this task as not done yet:");
-        ui.showMessage("  " + task);
-        ui.showLine();
     }
 
     /* ================= DELETE ================= */
 
     private void deleteTask(String input) throws TommyException {
         int idx = parseIndex(input);
-        Task removed = tasks.remove(idx);
+        tasks.remove(idx);
         storage.save(tasks);
-
-        ui.showLine();
-        ui.showMessage("Noted. I've removed this task:");
-        ui.showMessage("  " + removed);
-        ui.showMessage("Now you have " + tasks.size() + " tasks in the list.");
-        ui.showLine();
     }
 
     /* ================= HELPERS ================= */
@@ -227,23 +221,12 @@ public class Tommy {
             }
             return idx;
         } catch (Exception e) {
-            throw new TommyException(
-                    "Please provide a valid task number."
-            );
+            throw new TommyException("Please provide a valid task number.");
         }
     }
 
-    private void printAdd(Task task) {
-        ui.showLine();
-        ui.showMessage("Got it. I've added this task:");
-        ui.showMessage("  " + task);
-        ui.showMessage("Now you have " + tasks.size() + " tasks in the list.");
-        ui.showLine();
-    }
-    /**
-     * Main entry point for the Tommy application.
-     * Initializes Tommy with the default data file and runs the chatbot
-     */
+    /* ================= MAIN ================= */
+
     public static void main(String[] args) {
         new Tommy("data/tommy.txt").run();
     }

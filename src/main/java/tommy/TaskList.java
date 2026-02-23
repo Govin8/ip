@@ -16,8 +16,11 @@ public class TaskList {
     }
 
     public void add(Task task) {
+        assert task != null : "Task being added should not be null";
         tasks.add(task);
+        assert tasks.contains(task) : "Task should exist after adding";
     }
+
     /**
      * Returns a list of tasks whose descriptions contain the given keyword.
      *
@@ -39,8 +42,11 @@ public class TaskList {
 
 
     public Task get(int index) {
+        assert index >= 0 && index < tasks.size()
+                : "Index out of bounds in TaskList.get()";
         return tasks.get(index);
     }
+
 
     public Task remove(int index) {
         return tasks.remove(index);

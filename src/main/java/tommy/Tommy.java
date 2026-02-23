@@ -38,6 +38,8 @@ public class Tommy {
 
         while (true) {
             String input = ui.readCommand().trim();
+            assert input != null : "User input must not be null";
+
 
             if (input.equals("bye")) {
                 ui.showLine();
@@ -47,6 +49,7 @@ public class Tommy {
             }
 
             String response = getResponse(input); // no need for try-catch
+            assert response != null : "Response from getResponse should not be null";
             ui.showLine();
             ui.showMessage(response);
             ui.showLine();
@@ -214,9 +217,10 @@ public class Tommy {
     /* ================= HELPERS ================= */
 
     private int parseIndex(String input) throws TommyException {
+        assert input != null : "Input to parseIndex must not be null";
         try {
             int idx = Integer.parseInt(input.split(" ")[1]) - 1;
-            if (idx < 0 || idx >= tasks.size()) {
+             if (idx < 0 || idx >= tasks.size()) {
                 throw new NumberFormatException();
             }
             return idx;

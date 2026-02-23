@@ -14,6 +14,7 @@ public class Parser {
     }
 
     public static Task parseTaskFromFile(String line) throws TommyException {
+        assert line != null : "File line should not be null";
         String[] parts = line.split(" \\| ");
 
         Task task;

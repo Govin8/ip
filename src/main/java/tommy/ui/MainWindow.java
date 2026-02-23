@@ -25,8 +25,11 @@ public class MainWindow {
     private Tommy tommy;
 
     // Profile pictures
-    private Image userImage = new Image(this.getClass().getResourceAsStream("/images/user.png"));
-    private Image tommyImage = new Image(this.getClass().getResourceAsStream("/images/tommy.png"));
+    private final Image userImage =
+            new Image(getClass().getResource("/images/User.png").toExternalForm());
+
+    private final Image tommyImage =
+            new Image(getClass().getResource("/images/Tommy.png").toExternalForm());
 
     @FXML
     public void initialize() {

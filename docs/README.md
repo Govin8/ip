@@ -1,49 +1,34 @@
-Tommy – Your Personal Task Assistant
+📝 Tommy – Your Personal Task Assistant
 
-“Your mind is for having ideas, not holding them.” – David Allen source
+“Your mind is for having ideas, not holding them.” 
 
-Tommy helps you manage your tasks quickly and efficiently. It supports adding todos, deadlines, events, marking tasks done, finding tasks, and more.
+Tommy helps you manage your tasks quickly and efficiently. It supports adding todos, deadlines, events, marking tasks done, searching tasks, and much more! 🚀
 
+✨ Features
 
+✅ Manage tasks – add, delete, mark/unmark
 
+🔍 Flexible search – find tasks by keyword
 
-Features
+📅 Deadlines & events – track dates and time periods
 
-Manage tasks: add, delete, mark/unmark
+💻 GUI & CLI modes – use Tommy on desktop or terminal
 
-Flexible search: find tasks by keyword
+💾 Persistence – automatically saves tasks to a local file
 
-Deadlines & events: track dates and time periods
+⚠️ Error handling – warns you about invalid commands or dates
 
-GUI & CLI modes: use Tommy on desktop or in terminal
+🚀 Getting Started
 
-Persistence: saves tasks to a local file automatically
+Make sure you have Java 17 installed.
 
-Error handling: warns for invalid commands or dates
-
-
-
-
-
-Getting Started
-
-Open the Tommy JAR file:
+Open the Tommy JAR file from your terminal:
 
 java -jar duke.jar
 
-You can run Tommy in GUI mode (default) or CLI mode if you prefer.
+Tommy runs in GUI mode by default. Use CLI mode if you prefer a terminal experience.
 
-Interact with Tommy using commands listed below.
-
-
-
-
-
-
-Commands
-
-Here are the main commands you can use with Tommy:
-
+📚 Commands
 Adding Tasks
 
 Todo
@@ -75,10 +60,6 @@ Searching
 Find tasks containing a keyword
 
 find <keyword>
-
-
-
-
 Miscellaneous
 
 List all tasks
@@ -88,32 +69,30 @@ list
 Exit Tommy
 
 bye
-Example Usage
+💡 Example Usage
 
 Add a task:
 
-todo Read book
+todo Read book 📖
 
 Add a deadline:
 
-deadline Submit report /by 2026-03-01
+deadline Submit report /by 2026-03-01 🗓️
 
 Add an event:
 
-event Team meeting /from 10:00 /to 11:00
+event Team meeting /from 10:00 /to 11:00 👥
 
-Find tasks containing report:
+Find tasks containing "report":
 
-find report
-
-
+find report 🔍
 
 
 
-Notes
+📝 Notes
 
 Tommy saves your tasks in data/tommy.txt by default.
 
-Ensure the file exists or Tommy will create a new one.
+If the file doesn’t exist, Tommy will create a new one automatically.
 
 Commands are case-insensitive, but dates must follow yyyy-MM-dd.

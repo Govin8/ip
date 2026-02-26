@@ -1,8 +1,4 @@
-Good 👍 — let’s structure your README properly like a professional project (clear sections, clean hierarchy, easy for graders to scan).
 
-Below is a **well-structured, properly sectioned README** you can directly paste into `docs/README.md`.
-
----
 
 # 📝 Tommy – Your Personal Task Assistant 🤖
 

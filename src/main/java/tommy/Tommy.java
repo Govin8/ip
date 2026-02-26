@@ -296,8 +296,6 @@ public class Tommy {
         }
     }
 
-    /* ================= MAIN ================= */
-
     /**
      * Entry point for running Tommy in command-line mode.
      *

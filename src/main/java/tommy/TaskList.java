@@ -31,12 +31,29 @@ public class TaskList {
      *         an empty list is returned.
      */
     public ArrayList<Task> findTasks(String keyword) {
+        assert keyword != null : "Search keyword should not be null";
+
         ArrayList<Task> matches = new ArrayList<>();
+
+        String[] words = keyword.toLowerCase().trim().split("\\s+");
+
         for (Task task : tasks) {
-            if (task.getDescription().contains(keyword)) {
+            String description = task.getDescription().toLowerCase();
+
+            boolean isMatch = true;
+
+            for (String word : words) {
+                if (!description.contains(word)) {
+                    isMatch = false;
+                    break;
+                }
+            }
+
+            if (isMatch) {
                 matches.add(task);
             }
         }
+
         return matches;
     }
 

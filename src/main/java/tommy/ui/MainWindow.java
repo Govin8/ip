@@ -11,6 +11,10 @@ import javafx.scene.layout.VBox;
 import javafx.geometry.Pos;
 import tommy.Tommy;
 
+/**
+ * Controller for the main chat window FXML.
+ * Manages dialog display and user input handling.
+ */
 public class MainWindow {
 
     @FXML

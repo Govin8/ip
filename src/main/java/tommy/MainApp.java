@@ -10,6 +10,9 @@ import javafx.stage.Stage;
 import tommy.ui.MainWindow;
 import tommy.Tommy;
 
+/**
+ * Main JavaFX Application class that sets up the Tommy chatbot window.
+ */
 public class MainApp extends Application {
 
     private final Tommy tommy = new Tommy("data/tommy.txt");

@@ -28,6 +28,7 @@ java -jar duke.jar
 
 Tommy runs in GUI mode by default. Use CLI mode if you prefer a terminal experience.
 
+
 📚 Commands
 Adding Tasks
 
@@ -60,6 +61,9 @@ Searching
 Find tasks containing a keyword
 
 find <keyword>
+
+
+
 Miscellaneous
 
 List all tasks
@@ -69,6 +73,8 @@ list
 Exit Tommy
 
 bye
+
+
 💡 Example Usage
 
 Add a task:

@@ -8,6 +8,8 @@
 
 **Tommy** is a lightweight desktop task management chatbot that helps you manage your **todos, deadlines, and events** efficiently. It supports both GUI and CLI interaction and automatically saves your tasks locally.
 
+Github Pages: https://govin8.github.io/ip/
+
 ---
 
 # 📌 Table of Contents

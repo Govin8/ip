@@ -190,7 +190,7 @@ find report
 
 ### `bye`
 
-Closes the application safely.
+Closes the application.
 
 ```
 bye
